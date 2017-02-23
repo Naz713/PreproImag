@@ -70,7 +70,7 @@ public class AtributesField extends JScrollPane{
     private void refreshHeadLbl(){
         currentFileName = fileName.substring(0,fileName.length()-3)+" [";
         for (int j=0;j<Croma.NumAtributes;j++ ) {
-            currentFileName += sliderAtrib[j].getValue()+",";
+            currentFileName += sliderAtrib[j].getValue()+"";
         }
         currentFileName +="]";
         headLabel.setText("Se guarda bajo el nombre: "+currentFileName);
