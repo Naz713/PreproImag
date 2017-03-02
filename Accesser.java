@@ -11,7 +11,7 @@ public class Accesser{
 	protected static final String savingDBFN = "CromasDB";
 	protected static final String sourceDN = "Cromas";
 	protected static final String imageDBDN = "ImagenesCromasDB";
-	protected static final String cromasViewingDN = "CromasRezised";
+	protected static final String cromasViewingDN = "Originales/";
 
     public static File Retrive(int i) {
 		try {

@@ -24,6 +24,7 @@ public class InterfazGrafica extends JFrame{
         state = 0;
         //currentIteNum = i;
         this.imageFile = imageFile;
+        //System.out.println(imageFile.getName());
 		//image = Accesser.getImage(imageFile);
         //currentFileName = image.getName();
 		//System.out.println(image.getName());
@@ -33,9 +34,13 @@ public class InterfazGrafica extends JFrame{
     private void finalSaving(){
         if(state==1){
             Accesser.saveImage(Accesser.imageDBDN,iField.getOriginalImage()/*rezise image*/,LocalDateTime.now().toString()+" "+aField.getNewFileName());
-            Accesser.saveImage(Accesser.cromasViewingDN,iField.viewImage,imageFile.getName());
+            String directoryName = imageFile.getPath();
+            directoryName=directoryName.substring(Accesser.sourceDN.length(),directoryName.length() - imageFile.getName().length());
+            Accesser.saveImage(Accesser.cromasViewingDN+directoryName,iField.viewImage,imageFile.getName());
             Accesser.savetoDB(aField.getCroma());
             imageFile.delete();
+            JFrame frame = new JFrame("Mensaje de Guardado1");
+            JOptionPane.showMessageDialog(frame, "Se han Guardado los datos");
         }
         if (state==-1) {
             System.exit(0);
@@ -65,7 +70,7 @@ public class InterfazGrafica extends JFrame{
             setVisible(false);
             finalSaving();
             removeAll();
-            //System.exit(0);
+            //remove(aField);
         }
     } 
 

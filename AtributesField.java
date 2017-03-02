@@ -10,9 +10,13 @@ import javax.swing.text.StyleConstants;
 public class AtributesField extends JScrollPane{
     private JPanel principal;
     private JSlider[] sliderAtrib;
-    private JLabel[] atribLbls;
-    private JLabel[] atribValues;
-    private byte[] values;
+    private JLabel[] nAtribLbls;
+    private JLabel[] nAtribValues;
+    private JComboBox<String>[] comboAtrib;
+    private JLabel[] dAtribLbls;
+    private JLabel[] dAtribValues;
+    private byte[] numericValues;
+    private byte[] descriptiveValues;
     protected JLabel headLabel;
     protected String fileName;
     protected String currentFileName;
@@ -24,7 +28,8 @@ public class AtributesField extends JScrollPane{
         principal = new JPanel();
 		BoxLayout box = new BoxLayout(principal,BoxLayout.Y_AXIS);
 		principal.setLayout(box);
-        values = new byte[Croma.NumAtributes];
+        numericValues = new byte[Croma.NoNumericAtributes];
+        descriptiveValues = new byte[Croma.NoDescriptiveAtributes];
         setAtributes();
         //principal.setSize(500,700);
         setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -37,40 +42,57 @@ public class AtributesField extends JScrollPane{
 	}
     private void setAtributes(){
         headLabel = new JLabel();
-        sliderAtrib = new JSlider[Croma.NumAtributes];
-        atribLbls = new JLabel[Croma.NumAtributes];
-        atribValues = new JLabel[Croma.NumAtributes];
-        for (int i=0;i<Croma.NumAtributes;i++  ) {
-            sliderAtrib[i] = new JSlider(1, 5, 3);
+        sliderAtrib = new JSlider[Croma.NoNumericAtributes];
+        nAtribLbls = new JLabel[Croma.NoNumericAtributes];
+        nAtribValues = new JLabel[Croma.NoNumericAtributes];
+        for (int i=0;i<Croma.NoNumericAtributes;i++  ) {
+            sliderAtrib[i] = new JSlider(1, Croma.NumericAtributesSize, (int)(Croma.NumericAtributesSize/2));
             sliderAtrib[i].setMinorTickSpacing(1);
-            sliderAtrib[i].setMajorTickSpacing(5);
+            sliderAtrib[i].setMajorTickSpacing((int)(Croma.NumericAtributesSize/2));
             sliderAtrib[i].setPaintTicks(true);
-            atribLbls[i] = new JLabel(Croma.AtributesNames[i]);
-            atribValues[i] = new JLabel();
-            refreshValues(i);
+            nAtribLbls[i] = new JLabel(Croma.NumericAtributesNames[i]);
+            nAtribValues[i] = new JLabel();
+            refreshSliderValue(i);
             sliderAtrib[i].addChangeListener(new AtributesListener(i));
-            principal.add(atribLbls[i]);
+            principal.add(nAtribLbls[i]);
             principal.add(sliderAtrib[i]);
-            principal.add(atribValues[i]);
+            principal.add(nAtribValues[i]);
+        }
+        comboAtrib = new JComboBox[Croma.NoDescriptiveAtributes];
+        dAtribLbls = new JLabel[Croma.NoDescriptiveAtributes];
+        dAtribValues = new JLabel[Croma.NoDescriptiveAtributes];
+        for (int i=0;i<Croma.NoDescriptiveAtributes;i++  ) {
+
+            comboAtrib[i] = new JComboBox<String>(Croma.DescriptiveAtributesOptions[i]);
+            dAtribLbls[i] = new JLabel(Croma.DescriptiveAtributesNames[i]);
+            dAtribValues[i] = new JLabel();
+            refreshComboValue(i);
+            comboAtrib[i].addActionListener(new DAtributesListener(i));
+            principal.add(dAtribLbls[i]);
+            principal.add(comboAtrib[i]);
+            principal.add(dAtribValues[i]);
         }
         refreshHeadLbl();
     }
     public String getNewFileName(){
         return currentFileName;
     }
-    public byte[] getAtributesValues(){
-        return values;
+    public byte[] getNumericAtributesValues(){
+        return numericValues;
+    }
+    public byte[] getDescriptiveAtributesValues(){
+        return descriptiveValues;
     }
     public Croma getCroma(){
-        return new Croma(getNewFileName(),getAtributesValues());
-    }
-    public void refreshLbl(int i){
-        atribValues[i].setText(sliderAtrib[i].getValue()+"");
+        return new Croma(getNewFileName(),getNumericAtributesValues(),getDescriptiveAtributesValues());
     }
     private void refreshHeadLbl(){
         currentFileName = fileName.substring(0,fileName.length()-3)+" [";
-        for (int j=0;j<Croma.NumAtributes;j++ ) {
+        for (int j=0;j<Croma.NoNumericAtributes;j++ ) {
             currentFileName += sliderAtrib[j].getValue()+"";
+        }
+        for (int j=0;j<Croma.NoDescriptiveAtributes;j++ ) {
+            currentFileName += comboAtrib[j].getSelectedIndex()+"";
         }
         currentFileName +="]";
         headLabel.setText("Se guarda bajo el nombre: "+currentFileName);
@@ -81,16 +103,39 @@ public class AtributesField extends JScrollPane{
             this.i=i;
         }
         public void stateChanged(ChangeEvent e) {
-            refreshValues(i);
+            refreshSliderValue(i);
             refreshHeadLbl();
             //values[i] = (byte)(((JSlider)e.getSource()).getValue());
             //System.out.println(i+""+values[i]);
             //refreshLbl(i);
         }
     }
-    public void refreshValues(int i){
-        values[i] = (byte)sliderAtrib[i].getValue();
-        refreshLbl(i);
+    public class DAtributesListener implements ActionListener {
+        private int i;
+        public DAtributesListener(int i){
+            this.i=i;
+        }
+        public void actionPerformed(ActionEvent e) {
+            refreshComboValue(i);
+            refreshHeadLbl();
+            //values[i] = (byte)(((JSlider)e.getSource()).getValue());
+            //System.out.println(i+""+values[i]);
+            //refreshLbl(i);
+        }
+    }
+    public void refreshSliderValue(int i){
+        numericValues[i] = (byte)sliderAtrib[i].getValue();
+        refreshNumericLbl(i);
+    }
+    public void refreshNumericLbl(int i){
+        nAtribValues[i].setText(sliderAtrib[i].getValue()+"");
+    }
+    public void refreshComboValue(int i){
+        descriptiveValues[i] = (byte)comboAtrib[i].getSelectedIndex();
+        refreshDescriptiveLbl(i);
+    }
+    public void refreshDescriptiveLbl(int i){
+        dAtribValues[i].setText(comboAtrib[i].getItemAt(comboAtrib[i].getSelectedIndex()));
     }
     public static void main(String[] args) {
     	JFrame frame = new JFrame("Prueba Titulo");
