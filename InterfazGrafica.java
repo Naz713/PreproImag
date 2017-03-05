@@ -18,17 +18,19 @@ public class InterfazGrafica extends JFrame{
     private ButtonsField bField;
     //private NameField nField;
     private int state;
+    protected Croma croma;
 
-	public InterfazGrafica(File imageFile){
+	public InterfazGrafica(File imageFile, Croma croma){
 		super("Organizando Cromas");
         state = 0;
+        this.croma = croma;
         //currentIteNum = i;
         this.imageFile = imageFile;
         //System.out.println(imageFile.getName());
 		//image = Accesser.getImage(imageFile);
         //currentFileName = image.getName();
 		//System.out.println(image.getName());
-		setDefaultVentPrinc();
+		setDefaultVentPrinc(croma);
 	}
     //guardar 2 veces una para DB otra para observador, buscar/preguntar dimensiones
     private void finalSaving(){
@@ -37,7 +39,8 @@ public class InterfazGrafica extends JFrame{
             String directoryName = imageFile.getPath();
             directoryName=directoryName.substring(Accesser.sourceDN.length(),directoryName.length() - imageFile.getName().length());
             Accesser.saveImage(Accesser.cromasViewingDN+directoryName,iField.viewImage,imageFile.getName());
-            Accesser.savetoDB(aField.getCroma());
+            croma = aField.getCroma();
+            Accesser.savetoDB(croma);
             imageFile.delete();
             JFrame frame = new JFrame("Mensaje de Guardado1");
             JOptionPane.showMessageDialog(frame, "Se han Guardado los datos");
@@ -46,13 +49,13 @@ public class InterfazGrafica extends JFrame{
             System.exit(0);
         }
     }
-	private void setDefaultVentPrinc(){
+	private void setDefaultVentPrinc(Croma croma){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBackground( Color.gray );
 		setLayout(new BorderLayout());
 		iField = new ImageField(imageFile);
         add(iField,BorderLayout.CENTER);
-        aField = new AtributesField(imageFile.getName());
+        aField = new AtributesField(imageFile.getName(),croma);
         //aField.setMinimumSize(new Dimension(100,10));
         add(aField,BorderLayout.LINE_END);
         bField = new ButtonsField();
@@ -75,6 +78,6 @@ public class InterfazGrafica extends JFrame{
     } 
 
     public static void main(String[] args) {
-    	InterfazGrafica algo = new InterfazGrafica(Accesser.Retrive(1));
+    	InterfazGrafica algo = new InterfazGrafica(Accesser.Retrive(1),null);
     }
 }

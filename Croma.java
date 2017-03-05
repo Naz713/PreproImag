@@ -15,8 +15,8 @@ public class Croma{
 	public static final String[][] DescriptiveAtributesOptions = new String[][]
 	{{"Maiz","Frijol","Aguacate","Cafe","Vegetacion Primaria"},{"Ecorregion 1", "Ecorregion 2","Ecorregion 3","Ecorregion 4"},
 	{"0.595mm", "0.2mm"},{"NaOH","KOH"},{"10 dias", "15dias"}};
-	byte[] NumericAtributes;
-	byte[] DescriptiveAtributes;
+	protected byte[] NumericAtributes;
+	protected byte[] DescriptiveAtributes;
 
 	public Croma(String Name, byte[] NumericAtributes, byte[] DescriptiveAtributes){
 		if (DescriptiveAtributesOptions.length!=NoDescriptiveAtributes) {

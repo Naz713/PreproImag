@@ -16,13 +16,16 @@ public class Principal{
         public void componentRemoved(ContainerEvent e){
         	//JFrame frame = new JFrame("Mensaje de Guardado2");
         	//JOptionPane.showMessageDialog(frame, "Procediendo al siguiente Croma");
-            ((InterfazGrafica)e.getSource()).dispose();
+        	InterfazGrafica iG = (InterfazGrafica)e.getSource();
+        	Croma temporal = iG.croma;
+            iG.dispose();
             //System.out.println("listener");
-            run();
+            run(temporal);
             return;
         }
     }
-	public static void run() {
+	public static void run(Croma croma) {
+		System.out.println((croma==null)+"");
 		File[] list = sourceFile.listFiles();
 		//System.out.println(sourceFile.getName()+"/"+list.length);
 		if(list.length<=1){
@@ -35,7 +38,7 @@ public class Principal{
 					System.out.println("Carpeta no borrada, no vacia.");
 				}
 				//System.out.println("regreso");
-				run();
+				run(croma);
 				return;
 			}else{
 				//System.out.println("sale");
@@ -46,12 +49,12 @@ public class Principal{
 		if (actual.isDirectory()) {
 			sourceFile = actual;
 			//System.out.println("deep");
-			run();
+			run(croma);
 			return;
 		}
 		InterfazGrafica iG = null;
 		try{
-			iG = new InterfazGrafica(actual);
+			iG = new InterfazGrafica(actual,croma);
 			iG.addContainerListener(new ClosingListener());
 		}catch(Exception e){
 			e.printStackTrace();
@@ -60,7 +63,7 @@ public class Principal{
 	public static void main(String[] args) {
 		sourceFile = new File(Accesser.sourceDN);
 		//System.out.println("inicial");
-		run();
+		run(null);
 		return;
 	}
 }

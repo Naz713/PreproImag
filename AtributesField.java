@@ -21,7 +21,7 @@ public class AtributesField extends JScrollPane{
     protected String fileName;
     protected String currentFileName;
 
-	public AtributesField(String fileName){
+	public AtributesField(String fileName, Croma croma){
 		super();
         this.fileName = fileName;
 		setBackground( Color.gray );
@@ -30,7 +30,7 @@ public class AtributesField extends JScrollPane{
 		principal.setLayout(box);
         numericValues = new byte[Croma.NoNumericAtributes];
         descriptiveValues = new byte[Croma.NoDescriptiveAtributes];
-        setAtributes();
+        setAtributes(croma);
         //principal.setSize(500,700);
         setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         principal.setVisible(true);
@@ -40,15 +40,19 @@ public class AtributesField extends JScrollPane{
         //setMinimumSize(new Dimension(1000,10));
         setVisible(true);
 	}
-    private void setAtributes(){
+    private void setAtributes(Croma croma){
         headLabel = new JLabel();
         sliderAtrib = new JSlider[Croma.NoNumericAtributes];
         nAtribLbls = new JLabel[Croma.NoNumericAtributes];
         nAtribValues = new JLabel[Croma.NoNumericAtributes];
         for (int i=0;i<Croma.NoNumericAtributes;i++  ) {
-            sliderAtrib[i] = new JSlider(1, Croma.NumericAtributesSize, (int)(Croma.NumericAtributesSize/2));
+            int aux = (Croma.NumericAtributesSize/2);
+            if (croma!=null) {
+                aux=croma.NumericAtributes[i];
+            }
+            sliderAtrib[i] = new JSlider(1, Croma.NumericAtributesSize, aux );
             sliderAtrib[i].setMinorTickSpacing(1);
-            sliderAtrib[i].setMajorTickSpacing((int)(Croma.NumericAtributesSize/2));
+            sliderAtrib[i].setMajorTickSpacing(Croma.NumericAtributesSize/2);
             sliderAtrib[i].setPaintTicks(true);
             nAtribLbls[i] = new JLabel(Croma.NumericAtributesNames[i]);
             nAtribValues[i] = new JLabel();
@@ -62,8 +66,10 @@ public class AtributesField extends JScrollPane{
         dAtribLbls = new JLabel[Croma.NoDescriptiveAtributes];
         dAtribValues = new JLabel[Croma.NoDescriptiveAtributes];
         for (int i=0;i<Croma.NoDescriptiveAtributes;i++  ) {
-
             comboAtrib[i] = new JComboBox<String>(Croma.DescriptiveAtributesOptions[i]);
+            if (croma!=null) {
+                comboAtrib[i].setSelectedIndex(croma.DescriptiveAtributes[i]);
+            }
             dAtribLbls[i] = new JLabel(Croma.DescriptiveAtributesNames[i]);
             dAtribValues[i] = new JLabel();
             refreshComboValue(i);
@@ -140,7 +146,7 @@ public class AtributesField extends JScrollPane{
     public static void main(String[] args) {
     	JFrame frame = new JFrame("Prueba Titulo");
     	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	AtributesField panel = new AtributesField("Archivo");
+    	AtributesField panel = new AtributesField("Archivo",null);
     	frame.add(panel,BorderLayout.CENTER);
     	frame.setSize(300,200);
     	frame.setVisible(true);
