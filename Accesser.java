@@ -47,6 +47,9 @@ public class Accesser{
     public static BufferedImage scaleImage(Image img,int width,int height){
     	return toBufferedImage(img.getScaledInstance(width,height,Image.SCALE_SMOOTH));
     }
+    public static BufferedImage scaleImage(BufferedImage img,double proportion){
+    	return toBufferedImage(img.getScaledInstance((int)(img.getWidth()*proportion),(int)(img.getHeight()*proportion),Image.SCALE_SMOOTH));
+    }
     public static boolean savetoDB(Croma x){
     	FileWriter fw=null; BufferedWriter bw=null; File file = null;
     	try {
@@ -60,8 +63,10 @@ public class Accesser{
 			return false;
 		} finally {
 			try {
-				if (file != null)
+				if (file != null){
 					file.setReadOnly();
+					file = null;
+				}
 				if (bw != null)
 					bw.close();
 				if (fw != null)

@@ -14,18 +14,22 @@ public class Principal{
 	public static class ClosingListener implements ContainerListener {
         public void componentAdded(ContainerEvent e){}
         public void componentRemoved(ContainerEvent e){
-        	//JFrame frame = new JFrame("Mensaje de Guardado2");
-        	//JOptionPane.showMessageDialog(frame, "Procediendo al siguiente Croma");
         	InterfazGrafica iG = (InterfazGrafica)e.getSource();
         	Croma temporal = iG.croma;
             iG.dispose();
+            iG = null;
             //System.out.println("listener");
+            System.gc();
+            JFrame frame = new JFrame("Mensaje de Guardado");
+        	JOptionPane.showMessageDialog(frame, "Se han guardado los datos\nProcediendo al siguiente Croma");
+        	
             run(temporal);
             return;
         }
     }
 	public static void run(Croma croma) {
-		System.out.println((croma==null)+"");
+		System.gc();
+		//System.out.println((croma==null)+"");
 		File[] list = sourceFile.listFiles();
 		//System.out.println(sourceFile.getName()+"/"+list.length);
 		if(list.length<=1){
@@ -59,6 +63,7 @@ public class Principal{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		iG=null;
 	}
 	public static void main(String[] args) {
 		sourceFile = new File(Accesser.sourceDN);

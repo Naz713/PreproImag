@@ -5,6 +5,8 @@ import java.io.*;
 import javax.swing.event.*;
 import javax.swing.*;
 import javax.swing.text.*;
+import java.awt.image.*;
+import java.awt.Image.*;
 import javax.imageio.*;
 import javax.swing.text.StyleConstants;
 import java.time.LocalDateTime;
@@ -35,15 +37,17 @@ public class InterfazGrafica extends JFrame{
     //guardar 2 veces una para DB otra para observador, buscar/preguntar dimensiones
     private void finalSaving(){
         if(state==1){
-            Accesser.saveImage(Accesser.imageDBDN,iField.getOriginalImage()/*rezise image*/,LocalDateTime.now().toString()+" "+aField.getNewFileName());
+            BufferedImage imGuardar = iField.getOriginalImage();
             String directoryName = imageFile.getPath();
             directoryName=directoryName.substring(Accesser.sourceDN.length(),directoryName.length() - imageFile.getName().length());
-            Accesser.saveImage(Accesser.cromasViewingDN+directoryName,iField.viewImage,imageFile.getName());
+            Accesser.saveImage(Accesser.cromasViewingDN+directoryName,imGuardar,imageFile.getName());
+            Accesser.saveImage(Accesser.imageDBDN,imGuardar/*escalar*/,LocalDateTime.now().toString()+" "+aField.getNewFileName());
             croma = aField.getCroma();
             Accesser.savetoDB(croma);
+            imGuardar = null;
             imageFile.delete();
-            JFrame frame = new JFrame("Mensaje de Guardado1");
-            JOptionPane.showMessageDialog(frame, "Se han Guardado los datos");
+            //JFrame frame = new JFrame("Mensaje de Guardado1");
+            //JOptionPane.showMessageDialog(frame, "Se han Guardado los datos");
         }
         if (state==-1) {
             System.exit(0);

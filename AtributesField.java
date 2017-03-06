@@ -100,7 +100,7 @@ public class AtributesField extends JScrollPane{
         for (int j=0;j<Croma.NoDescriptiveAtributes;j++ ) {
             currentFileName += comboAtrib[j].getSelectedIndex()+"";
         }
-        currentFileName +="]";
+        currentFileName +="].jpg";
         headLabel.setText("Se guarda bajo el nombre: "+currentFileName);
     }
     public class AtributesListener implements ChangeListener {

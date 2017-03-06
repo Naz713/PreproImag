@@ -31,8 +31,8 @@ public class ImageField extends JPanel{
 		setLayout(box);
         filtCombo = new JComboBox<String>(filtros);
         filtCombo.addActionListener(new FilterListener());
-        imageLbl = new JLabel(new ImageIcon(viewImage));
-        imageNumber = 0;
+        imageLbl = new JLabel();
+        imageNumber = 2;
         refreshImage(0);
         JScrollPane scrollPane = new JScrollPane(imageLbl);
         //scrollPane.setMaximumSize(new Dimension(5+image.getWidth(),20+image.getHeight()));
@@ -42,7 +42,9 @@ public class ImageField extends JPanel{
 		setVisible(true);
 	}
     public BufferedImage getOriginalImage(){
-        return image;
+        BufferedImage temporal = image;
+        image = null;
+        return temporal;
     }
     public static BufferedImage getViewImage(BufferedImage rsImage){
         if (Math.max(rsImage.getWidth(),rsImage.getHeight())>2000) {
@@ -50,6 +52,9 @@ public class ImageField extends JPanel{
         }else {
             return rsImage;
         }
+    }
+    public BufferedImage getViewImage(){
+        return viewImage;
     }
     public static BufferedImage copyBI(BufferedImage bi) {
         ColorModel cm = bi.getColorModel();
@@ -64,6 +69,12 @@ public class ImageField extends JPanel{
         }
         imageNumber = i%(filtros.length);
         BufferedImage auxiliar = copyBI(viewImage);
+        /*///////
+        JFrame frame = new JFrame("ViewImage");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.add(new JLabel(new ImageIcon(viewImage)),BorderLayout.CENTER);
+        frame.setVisible(true);
+        /////////////////////////////////////////// Exponer viewImage*/
         ConvolveOp op = null;
         switch (i%(filtros.length)) {
             case 0:
@@ -81,6 +92,7 @@ public class ImageField extends JPanel{
         }
         Graphics2D g2d = (Graphics2D)auxiliar.getGraphics();
         g2d.drawImage(auxiliar,op,0,0);
+        g2d.dispose();
         imageLbl.setIcon(new ImageIcon(auxiliar));
     }
     public class FilterListener implements ActionListener {
