@@ -21,6 +21,12 @@ public class Accesser{
 		}
         return null;
 	}
+	public static BufferedImage copyBI(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(null);
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }
 	/**Converts a given Image into a BufferedImage
 	* @param img The Image to be converted
 	* @return The converted BufferedImage

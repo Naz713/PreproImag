@@ -41,7 +41,7 @@ public class InterfazGrafica extends JFrame{
             String directoryName = imageFile.getPath();
             directoryName=directoryName.substring(Accesser.sourceDN.length(),directoryName.length() - imageFile.getName().length());
             Accesser.saveImage(Accesser.cromasViewingDN+directoryName,imGuardar,imageFile.getName());
-            Accesser.saveImage(Accesser.imageDBDN,imGuardar/*escalar*/,LocalDateTime.now().toString()+" "+aField.getNewFileName());
+            Accesser.saveImage(Accesser.imageDBDN,imGuardar,LocalDateTime.now().toString()+" "+aField.getNewFileName());
             croma = aField.getCroma();
             Accesser.savetoDB(croma);
             imGuardar = null;

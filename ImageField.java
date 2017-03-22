@@ -47,8 +47,8 @@ public class ImageField extends JPanel{
         return temporal;
     }
     public static BufferedImage getViewImage(BufferedImage rsImage){
-        if (Math.max(rsImage.getWidth(),rsImage.getHeight())>2000) {
-            return Accesser.scaleImage(rsImage,(int)rsImage.getWidth()/10,(int)rsImage.getHeight()/10);
+        if (Math.max(rsImage.getWidth(),rsImage.getHeight())>4000) {
+            return Accesser.scaleImage(rsImage,(int)rsImage.getWidth()/2,(int)rsImage.getHeight()/2);
         }else {
             return rsImage;
         }

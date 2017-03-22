@@ -32,9 +32,15 @@ public class Principal{
 		//System.out.println((croma==null)+"");
 		File[] list = sourceFile.listFiles();
 		//System.out.println(sourceFile.getName()+"/"+list.length);
-		if(list.length<=1){
+		File actual = list[0];
+		if (actual.isHidden()) {
+			actual.delete();
+			run(croma);
+			return;
+		}
+		if(list.length==0){
 			if (!sourceFile.getName().equals(Accesser.sourceDN)) {
-				sourceFile.listFiles()[0].delete();
+				//sourceFile.listFiles()[0].delete();
 				//System.out.println("-equal");
 				File temporal = sourceFile;
 				sourceFile = sourceFile.getParentFile();
@@ -49,7 +55,6 @@ public class Principal{
 				System.exit(0);
 			}
 		}
-		File actual = list[1];
 		if (actual.isDirectory()) {
 			sourceFile = actual;
 			//System.out.println("deep");
