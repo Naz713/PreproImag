@@ -32,6 +32,11 @@ public class Principal{
 		//System.out.println((croma==null)+"");
 		File[] list = sourceFile.listFiles();
 		//System.out.println(sourceFile.getName()+"/"+list.length);
+		if (list.length == 0) {
+			JFrame frame = new JFrame("Mensaje de Salida");
+        	JOptionPane.showMessageDialog(frame, "Haz acabado con todos los Cromas :)");
+			System.exit(0);
+		}
 		File actual = list[0];
 		if (actual.isHidden()) {
 			actual.delete();

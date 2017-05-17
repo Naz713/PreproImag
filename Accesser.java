@@ -35,7 +35,7 @@ public class Accesser{
     	if (img instanceof BufferedImage){
     	    return (BufferedImage) img;
     	}// Create a buffered image with transparency
-    	BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+    	BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
     	// Draw the image on to the buffered image
     	Graphics2D bGr = bimage.createGraphics();
     	bGr.drawImage(img, 0, 0, null);
@@ -60,17 +60,17 @@ public class Accesser{
     	FileWriter fw=null; BufferedWriter bw=null; File file = null;
     	try {
     		file = new File(savingDBFN);
-    		file.setWritable(true,false);
-			fw = new FileWriter(file, true);
+    		//file.setWritable(true,false);
+			fw = new FileWriter(file,true);
 			bw = new BufferedWriter(fw);
-				bw.write(x.toString()+"\n");
+			bw.write(x.toString()+"\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		} finally {
 			try {
 				if (file != null){
-					file.setReadOnly();
+					//file.setReadOnly();
 					file = null;
 				}
 				if (bw != null)
@@ -87,6 +87,13 @@ public class Accesser{
 	public static boolean saveImage(String directoryName, BufferedImage image, String fileName){
 		try {
 			Files.createDirectories((new File(directoryName)).toPath());
+			//System.out.println((char)(237));
+			fileName = fileName.substring(0,fileName.length()-4);
+			fileName = fileName.replaceAll("[.]","-");
+			fileName = fileName.replaceAll("[ ]","");
+			fileName = fileName.replaceAll(":","-");
+			fileName = fileName.replaceAll("["+(char)(237)+"]","i");
+			fileName += ".jpg";
     		File outputfile = new File(directoryName+"/"+fileName);
     		ImageIO.write(image, "jpg", outputfile);
 		} catch (IOException ex) {

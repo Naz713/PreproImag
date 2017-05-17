@@ -10,6 +10,8 @@ import java.awt.Image.*;
 import javax.imageio.*;
 import javax.swing.text.StyleConstants;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 public class InterfazGrafica extends JFrame{
 	//private BufferedImage image;
@@ -41,7 +43,7 @@ public class InterfazGrafica extends JFrame{
             String directoryName = imageFile.getPath();
             directoryName=directoryName.substring(Accesser.sourceDN.length(),directoryName.length() - imageFile.getName().length());
             Accesser.saveImage(Accesser.cromasViewingDN+directoryName,imGuardar,imageFile.getName());
-            Accesser.saveImage(Accesser.imageDBDN,imGuardar,LocalDateTime.now().toString()+" "+aField.getNewFileName());
+            Accesser.saveImage(Accesser.imageDBDN,imGuardar,LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)+" "+aField.getNewFileName());
             croma = aField.getCroma();
             Accesser.savetoDB(croma);
             imGuardar = null;
